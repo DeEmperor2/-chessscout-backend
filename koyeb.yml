@@ -1,0 +1,16 @@
+name: chessscout-backend
+services:
+  - name: api
+    type: web
+    git:
+      branch: main
+    build:
+      buildpack:
+        build-command: pip install -r requirements.txt
+    run-command: uvicorn main:app --host 0.0.0.0 --port 8000
+    ports:
+      - port: 8000
+        protocol: http
+    env:
+      - key: ANTHROPIC_API_KEY
+        value: "REPLACE_WITH_YOUR_KEY"
