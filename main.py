@@ -186,22 +186,27 @@ def analyze_games(pgns: list[str], target_username: str) -> dict:
             continue
 
         stats["total_games"] += 1
-        stats[if outcome == "win":
-    stats["wins"] += 1
-elif outcome == "loss":
-    stats["losses"] += 1
-elif outcome == "draw":
-    stats["draws"] += 1] += 1
-        stats[f"{color}_{outcome}s"] += 1
+        if outcome == "win":
+            stats["wins"] += 1
+        elif outcome == "loss":
+            stats["losses"] += 1
+        else:
+            stats["draws"] += 1
+        if outcome == "win":
+            stats[f"{color}_wins"] += 1
+        elif outcome == "loss":
+            stats[f"{color}_losses"] += 1
+        else:
+            stats[f"{color}_draws"] += 1
 
         # Opening
         key = f"{eco} {opening}".strip() if eco else opening
-        stats["openings"][key][if outcome == "win":
-    stats["wins"] += 1
-elif outcome == "loss":
-    stats["losses"] += 1
-elif outcome == "draw":
-    stats["draws"] += 1] += 1
+        if outcome == "win":
+            stats["openings"][key]["wins"] += 1
+        elif outcome == "loss":
+            stats["openings"][key]["losses"] += 1
+        else:
+            stats["openings"][key]["draws"] += 1
 
         # Opponent rating
         opp_key = "BlackElo" if color == "white" else "WhiteElo"
@@ -238,12 +243,7 @@ elif outcome == "draw":
         stats["game_lengths_ply"].append(ply)
         bucket = "short" if ply < 20 else "medium" if ply < 60 else "long"
         stats["by_length"][bucket]["games"] += 1
-        stats["by_length"][bucket][if outcome == "win":
-    stats["wins"] += 1
-elif outcome == "loss":
-    stats["losses"] += 1
-elif outcome == "draw":
-    stats["draws"] += 1 += 1
+        stats["by_length"][bucket][outcome + "s"] += 1
 
         # Collapse detection
         if ply >= 60 and (outcome == "loss" or "timeout" in termination or "time" in termination):
