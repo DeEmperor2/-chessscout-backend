@@ -243,7 +243,12 @@ def analyze_games(pgns: list[str], target_username: str) -> dict:
         stats["game_lengths_ply"].append(ply)
         bucket = "short" if ply < 20 else "medium" if ply < 60 else "long"
         stats["by_length"][bucket]["games"] += 1
-        stats["by_length"][bucket][outcome + "s"] += 1
+        if outcome == "win":
+            stats["by_length"][bucket]["wins"] += 1
+        elif outcome == "loss":
+            stats["by_length"][bucket]["losses"] += 1
+        else:
+            stats["by_length"][bucket]["draws"] += 1
 
         # Collapse detection
         if ply >= 60 and (outcome == "loss" or "timeout" in termination or "time" in termination):
